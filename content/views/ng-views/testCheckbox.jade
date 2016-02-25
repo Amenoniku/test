@@ -1,0 +1,5 @@
+p {{field.label}}
+.checkbox
+	label(ng-repeat="value in field.values") {{value.value}}
+		input.testcheckbox(type="{{field.type}}" name="{{field.name}}" value="{{value.value}}" ng-model="value.Selected")
+span {{field.description}}

@@ -1,0 +1,22 @@
+extends ../layout/index
+
+block content
+	.panel.panel-default(ng-repeat="person in persons")
+		.panel-heading 
+			span {{person.firstName}} {{person.lastName}}
+		.panel-body
+			span {{person.comment}}
+			button.btn.btn-danger(type="button" ng-click="delete($event)") Удалить 
+			button.btn.btn-primary(type="button" ng-click="change($event, person.id)") Изменить
+
+	.panel.panel-default.add-person
+		.panel-heading Добавить пользователя
+		.panel-body
+			form(action='#' ng-submit='add($event)')
+				.input-group
+					input.form-control(type='text' name='firstName' placeholder='Имя')
+				.input-group
+					input.form-control(type='text' name='lastName' placeholder='Фамилия')
+				.input-group
+					textarea.form-control(name='comment', placeholder='Коментарий')
+				input.btn.btn-default(type='submit')
