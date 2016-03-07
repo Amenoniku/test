@@ -16,35 +16,39 @@ module.exports = angular.module("controllers", []).controller("Persons", require
 
 },{"./controllers/persons":3}],3:[function(require,module,exports){
 module.exports = [
-  "$scope", "$http", "$compile", function($scope, $http, $compile) {
-    $http.get("data/persons.json").then(function(persons) {
-      return $scope.persons = persons.data;
-    });
+  "$scope", "$http", "$compile", "$templateCache", function($scope, $http, $compile, $templateCache) {
+    var isNum, urls, validation;
+    urls = {
+      changeForm: 'views/change-form.html',
+      persons: 'data/persons.json'
+    };
+    $scope.fetch = function(url) {
+      $scope.data = {};
+      return $http({
+        method: 'GET',
+        url: url
+      }).then(function(res) {
+        if (typeof res.data === 'string') {
+          return $templateCache.put('form', res.data);
+        } else {
+          return $scope.data.persons = res.data;
+        }
+      });
+    };
+    $scope.fetch(urls.persons);
+    $scope.fetch(urls.changeForm);
     $scope.change = function(event, id) {
-      var compile, tpl;
-      $scope.person = $scope.persons[id];
-      tpl = "<form class='change-form' action='#'> <div class='input-group'> <input class='form-control' type='text' name='firstName' placeholder='Имя'> </div> <div class='input-group'> <input class='form-control' type='text' name='lastName' placeholder='Фамилия'> </div> <div class='input-group'> <textarea class='form-control' name='comment' placeholder='Коментарий'></textarea> </div> <input class='btn btn-default' type='button' value='Изменить' ng-click='saveChange($event)'> <span class='close' ng-click='close($event)'>×</span> </form>";
-      compile = $compile(tpl)($scope);
+      var changeForm, compile;
+      changeForm = document.getElementById('changeForm');
+      if (changeForm) {
+        changeForm.parentNode.removeChild(changeForm);
+      }
+      $scope.person = $scope.data.persons[id];
+      compile = $compile($templateCache.get('form'))($scope);
       compile[0].firstName.value = $scope.person.firstName;
       compile[0].lastName.value = $scope.person.lastName;
       compile[0].comment.value = $scope.person.comment;
       event.target.parentNode.appendChild(compile[0]);
-      return false;
-    };
-    $scope.saveChange = function(e) {
-      var comment, fields, firstName, lastName;
-      fields = e.target.parentNode;
-      firstName = fields.firstName.value;
-      lastName = fields.lastName.value;
-      comment = fields.comment.value;
-      if (firstName.length <= 255 && firstName.length > 1 && !+firstName) {
-        $scope.person.firstName = firstName;
-      }
-      if (lastName.length <= 255 && lastName.length > 1 && !+lastName) {
-        $scope.person.lastName = lastName;
-      }
-      $scope.person.comment = comment;
-      fields.parentNode.removeChild(fields);
       return false;
     };
     $scope.close = function(e) {
@@ -52,29 +56,57 @@ module.exports = [
       return false;
     };
     $scope["delete"] = function(event, id) {
-      return $scope.persons.splice(id, 1);
+      $scope.data.persons.forEach(function(item, i) {
+        return item.id = i;
+      });
+      return $scope.data.persons.splice(id, 1);
+    };
+    isNum = function(str) {
+      var i, j, ref;
+      for (i = j = 0, ref = str.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        if (+str[i]) {
+          return true;
+        }
+      }
+    };
+    validation = function(fields) {
+      var firstName, lastName;
+      firstName = fields.firstName.value;
+      lastName = fields.lastName.value;
+      if (firstName.length >= 255 || firstName.length < 1 || isNum(firstName)) {
+        alert("Ошибка ввода в поле \"Имя\"");
+        return false;
+      } else if (lastName.length >= 255 || lastName.length < 1 || isNum(lastName)) {
+        alert("Ошибка ввода в поле \"Фамилия\"");
+        return false;
+      } else {
+        return true;
+      }
+    };
+    $scope.saveChange = function(e) {
+      var fields;
+      fields = e.target.parentNode;
+      if (validation(fields)) {
+        $scope.person.firstName = fields.firstName.value;
+        $scope.person.lastName = fields.lastName.value;
+        $scope.person.comment = fields.comment.value;
+        fields.parentNode.removeChild(fields);
+      }
+      return false;
     };
     return $scope.add = function(event) {
-      var comment, firstName, form, lastName, newPerson;
+      var form, newPerson;
       event.preventDefault();
       form = event.target;
-      firstName = form.firstName.value;
-      lastName = form.lastName.value;
-      comment = form.comment.value;
-      if (!(firstName.length <= 255 && firstName.length > 1 && !+firstName)) {
-        return alert("Ошибка ввода в поле \"Имя\"");
+      if (validation(form)) {
+        newPerson = {
+          id: $scope.data.persons.length,
+          firstName: form.firstName.value,
+          lastName: form.lastName.value,
+          comment: form.comment.value
+        };
+        return $scope.data.persons.push(newPerson);
       }
-      if (!(lastName.length <= 255 && lastName.length > 1 && !+lastName)) {
-        return alert("Ошибка ввода в поле \"Фамилия\"");
-      }
-      newPerson = {
-        id: $scope.persons.length,
-        firstName: firstName,
-        lastName: lastName,
-        comment: comment
-      };
-      $scope.persons.push(newPerson);
-      return console.log($scope.persons);
     };
   }
 ];

@@ -1,12 +1,12 @@
 extends ../layout/index
 
 block content
-	.panel.panel-default(ng-repeat="person in persons")
+	.panel.panel-default(ng-repeat="person in data.persons")
 		.panel-heading 
 			span {{person.firstName}} {{person.lastName}}
 		.panel-body
 			span {{person.comment}}
-			button.btn.btn-danger(type="button" ng-click="delete($event)") Удалить 
+			button.btn.btn-danger(type="button" ng-click="delete($event, person.id)") Удалить 
 			button.btn.btn-primary(type="button" ng-click="change($event, person.id)") Изменить
 
 	.panel.panel-default.add-person
