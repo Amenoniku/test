@@ -6,7 +6,7 @@ paths      = require "../paths"
 path       = require "path"
 
 gulp.task "icons", ->
-	gulp.src "content/icons/**/*.svg"
+	gulp.src "content/images/icons/**/*.svg"
 		.pipe svgSymbols
 			id: "icon_%f"
 			className: "%f"

@@ -12,7 +12,7 @@ gulp.task "default", ["del"], ->
 			"scripts"
 			"template"
 			"copy"
-		], "server"
+		], "php"
 
 gulp.task "build", ["del"], ->
 	gulp.start(

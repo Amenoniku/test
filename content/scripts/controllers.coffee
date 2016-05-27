@@ -1,4 +1,6 @@
 "use strict"
 
 module.exports = angular.module "controllers", []
-	.controller "Persons", require "./controllers/persons"
+	.controller "NewsList", require "./controllers/news-list"
+	.controller "NewsPage", require "./controllers/news-page"
+	.controller "PhpQuest", require "./controllers/php-quest"

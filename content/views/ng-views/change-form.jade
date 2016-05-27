@@ -1,9 +1,0 @@
-form#changeForm.change-form(action='#')
-	.input-group
-		input.form-control(type='text' name='firstName' placeholder='Имя')
-	.input-group
-		input.form-control(type='text' name='lastName' placeholder='Фамилия')
-	.input-group
-		textarea.form-control(name='comment' placeholder='Коментарий')
-	input.btn.btn-default(type='button' value='Изменить' ng-click='saveChange($event)')
-	span.close(ng-click='close($event)') ×

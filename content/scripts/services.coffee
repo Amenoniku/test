@@ -3,4 +3,5 @@
 require "ngResource"
 
 module.exports = angular.module "services", ["ngResource"]
-	# .factory "GetForm", require "./services/getForm"
+	.factory "GetNews", require "./services/get-news"
+	.factory "Pagination", require "./services/pagination"

@@ -1,0 +1,17 @@
+div(ng-init="checkTable()")
+	h4 Задача 1
+	p Простая авторизация с mysql
+	form.auth(method="post", ng-submit="auth($event)")
+		filedset
+			.form-group
+				label(for='pageurl') Логин
+					input#pageurl.form-control(type="text", name="login" value="name")
+			.form-group
+				label(for='pagename') Пароль
+					input#pagename.form-control(type="password", name="pass" value="1234")
+			.form-group
+					button.btn.btn-primary(type="submit", ) Войти
+	span(ng-if="user") Привет {{user.user_login}}
+
+div(ng-init="filesList()")
+	pre(ng-bind-html="tree")

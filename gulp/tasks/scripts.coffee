@@ -18,19 +18,19 @@ gulp.task "scripts", ->
 
 	clientBundler = browserify
 		cache: {}, packageCache: {}
-		entries: "./content/scripts/app.coffee"
+		entries: "./content/scripts/main.coffee"
 		extensions: [".cjsx", ".coffee"]
 
 	for k, v of dependencies
 		clientBundler.external k
 
 	rebundle = ->
-		bundleLogger.start "client.js"
+		bundleLogger.start "main.js"
 		clientBundler.bundle()
 			.on "error", handleErrors
-			.pipe source "scripts.js"
+			.pipe source "main.js"
 			.pipe gulp.dest paths.scripts
-			.on "end", -> bundleLogger.end "client.js"
+			.on "end", -> bundleLogger.end "main.js"
 
 	if global.watch
 		clientBundler = watchify clientBundler
