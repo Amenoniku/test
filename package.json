@@ -32,7 +32,8 @@
     "angular": "*",
     "angular-animate": "*",
     "angular-resource": "*",
-    "angular-route": "*"
+    "angular-route": "*",
+    "vue": "^1.0.24"
   },
   "devDependencies": {
     "autoprefixer-stylus": "*",
